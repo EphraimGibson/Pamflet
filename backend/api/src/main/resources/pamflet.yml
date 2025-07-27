@@ -1,0 +1,465 @@
+openapi: 3.0.3
+info:
+  title: Card Deck API
+  version: 1.0.0
+
+paths:
+  /api/card/{deckId}:
+    get:
+      summary: Get all cards in a deck
+      parameters:
+        - name: deckId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of cards
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CardModel'
+        '404':
+          description: Deck not found
+        '500':
+          description: Internal server error
+    post:
+      summary: Add a card to a deck
+      parameters:
+        - name: deckId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardModel'
+      responses:
+        '201':
+          description: Card created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardModel'
+        '400':
+          description: Invalid request
+        '404':
+          description: Deck not found
+        '500':
+          description: Internal server error
+  /api/card/{deckId}/{cardNumber}:
+    get:
+      summary: Get a specific card from deck by card number
+      parameters:
+        - name: deckId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: cardNumber
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Card details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardModel'
+        '404':
+          description: Card not found
+        '500':
+          description: Internal server error
+  /api/card/{id}:
+    get:
+      summary: Get card by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Card details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardModel'
+        '404':
+          description: Card not found
+        '500':
+          description: Internal server error
+    put:
+      summary: Update card by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardModel'
+      responses:
+        '200':
+          description: Card updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardModel'
+        '400':
+          description: Invalid request
+        '404':
+          description: Card not found
+        '500':
+          description: Internal server error
+    patch:
+      summary: Partially update card by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardModel'
+      responses:
+        '200':
+          description: Card patched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardModel'
+        '400':
+          description: Invalid request
+        '404':
+          description: Card not found
+        '500':
+          description: Internal server error
+    delete:
+      summary: Delete card by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Card deleted
+        '404':
+          description: Card not found
+        '500':
+          description: Internal server error
+  /api/deck/{id}:
+    get:
+      summary: Get deck by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Deck details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeckModel'
+        '404':
+          description: Deck not found
+        '500':
+          description: Internal server error
+    put:
+      summary: Update deck by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeckModel'
+      responses:
+        '200':
+          description: Deck updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeckModel'
+        '400':
+          description: Invalid request
+        '404':
+          description: Deck not found
+        '500':
+          description: Internal server error
+    patch:
+      summary: Partially update deck by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeckModel'
+      responses:
+        '200':
+          description: Deck patched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeckModel'
+        '400':
+          description: Invalid request
+        '404':
+          description: Deck not found
+        '500':
+          description: Internal server error
+  /api/deck:
+    get:
+      summary: Get all decks of authenticated user
+      responses:
+        '200':
+          description: List of decks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeckModel'
+        '404':
+          description: No decks found
+        '500':
+          description: Internal server error
+    post:
+      summary: Create a new deck
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeckModel'
+      responses:
+        '201':
+          description: Deck created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeckModel'
+        '400':
+          description: Invalid request
+        '500':
+          description: Internal server error
+  /api/register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserModel'
+      responses:
+        '201':
+          description: User registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModel'
+        '400':
+          description: Invalid request
+        '409':
+          description: Email already exists
+        '500':
+          description: Internal server error
+  /api/login:
+    post:
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+        '400':
+          description: Invalid credentials
+        '500':
+          description: Internal server error
+  /api/user:
+    get:
+      summary: Get all users
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserModel'
+        '404':
+          description: No users found
+        '500':
+          description: Internal server error
+  /api/user/{id}:
+    get:
+      summary: Get user by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModel'
+        '404':
+          description: User not found
+        '500':
+          description: Internal server error
+    put:
+      summary: Update user by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserModel'
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModel'
+        '400':
+          description: Invalid request
+        '404':
+          description: User not found
+        '500':
+          description: Internal server error
+    patch:
+      summary: Partially update user by id (admin can change role)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserModel'
+      responses:
+        '200':
+          description: User patched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModel'
+        '400':
+          description: Invalid request
+        '404':
+          description: User not found
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    UserModel:
+      type: object
+      required:
+        - username
+        - email
+        - password
+        - name
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        authorities:
+          type: array
+          items:
+            type: string
+
+    DeckModel:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+
+    CardModel:
+      type: object
+      required:
+        - front
+      properties:
+        id:
+          type: string
+        deckId:
+          type: string
+        cardNumber:
+          type: integer
+        front:
+          type: string
+        back:
+          type: string
