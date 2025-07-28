@@ -32,9 +32,7 @@ public class CardService {
 
     @Transactional
     public List<CardModel> getCardsByDeck(Long deckId) {
-
         Customer customer = authenticationService.getCustomer();
-
         Deck deck = deckService.getDeckById(deckId);
 
         if(!Objects.equals(deck.getUser().getId(), customer.getId())){

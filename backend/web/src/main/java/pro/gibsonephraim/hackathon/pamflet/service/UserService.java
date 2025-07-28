@@ -30,7 +30,7 @@ public class UserService {
 
     public String login(ApiLoginPostRequest request) {
         Customer user = userRepository.findUserByEmail(request.getEmail())
-                .orElseThrow(()-> new EntityNotFoundException("User with email:" +request.getEmail()+ "not found"));
+                .orElseThrow(()-> new EntityNotFoundException("User with email:" +request.getEmail()+ " not found"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new AccessDeniedException("Invalid password");

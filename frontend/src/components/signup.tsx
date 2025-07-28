@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
+import { AuthService } from '../services/authService';
+import { useNavigate } from 'react-router-dom';
 
 interface SignupProps {
-  onSignup: (username: string, email: string, password: string) => void;
+  onSignup?: (username: string, email: string, password: string) => void;
   loading?: boolean;
   error?: string;
 }
 
-const Signup: React.FC<SignupProps> = ({ onSignup, loading = false, error }) => {
+const Signup: React.FC<SignupProps> = ({ onSignup, loading: externalLoading, error: externalError }) => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,7 +22,7 @@ const Signup: React.FC<SignupProps> = ({ onSignup, loading = false, error }) => 
   const validateEmail = (email: string) =>
     /^\S+@\S+\.\S+$/.test(email);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!username.trim() || !email.trim() || !password)
@@ -31,7 +35,27 @@ const Signup: React.FC<SignupProps> = ({ onSignup, loading = false, error }) => 
       return setFormError('Passwords do not match.');
 
     setFormError(null);
-    onSignup(username.trim(), email.trim(), password);
+    setLoading(true);
+
+    try {
+      await AuthService.register({
+        username: username.trim(),
+        email: email.trim(),
+        password
+      });
+
+      // Call the onSignup callback if provided
+      if (onSignup) {
+        onSignup(username.trim(), email.trim(), password);
+      }
+
+      // Navigate to login page after successful registration
+      navigate('/login');
+    } catch (err) {
+      setFormError(err instanceof Error ? err.message : 'Registration failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -41,9 +65,9 @@ const Signup: React.FC<SignupProps> = ({ onSignup, loading = false, error }) => 
           Create your account
         </h2>
 
-        {(error || formError) && (
+        {(externalError || formError) && (
           <div className="mb-4 p-3 text-sm text-red-700 bg-red-100 rounded">
-            {formError || error}
+            {formError || externalError}
           </div>
         )}
 
@@ -202,12 +226,12 @@ const Signup: React.FC<SignupProps> = ({ onSignup, loading = false, error }) => 
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || externalLoading}
             className={`w-full py-3 rounded-xl text-white font-semibold transition ${
-              loading ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+              (loading || externalLoading) ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
             }`}
           >
-            {loading ? 'Creating account...' : 'Sign Up'}
+            {(loading || externalLoading) ? 'Creating account...' : 'Sign Up'}
           </button>
         </form>
         {/* New "Already have an account?" link */}

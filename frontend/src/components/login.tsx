@@ -1,20 +1,43 @@
 import React, { useState } from 'react';
+import { AuthService } from '../services/authService';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginProps {
-  onLogin: (username: string, password: string) => void;
+  onLogin?: (token: string) => void;
   loading?: boolean;
   error?: string;
 }
 
-const Login: React.FC<LoginProps> = ({ onLogin, loading = false, error }) => {
-  const [username, setUsername] = useState('');
+const Login: React.FC<LoginProps> = ({ onLogin, loading: externalLoading, error: externalError }) => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | undefined>(externalError);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!username.trim() || !password) return;
-    onLogin(username.trim(), password);
+    if (!email.trim() || !password) return;
+
+    setLoading(true);
+    setError(undefined);
+
+    try {
+      const token = await AuthService.login({ email: email.trim(), password });
+
+      // Call the onLogin callback if provided
+      if (onLogin) {
+        onLogin(token);
+      }
+
+      // Navigate to decks page after successful login
+      navigate('/decks');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -24,25 +47,25 @@ const Login: React.FC<LoginProps> = ({ onLogin, loading = false, error }) => {
           Welcome to Pamflet
         </h2>
 
-        {error && (
+        {(error || externalError) && (
           <div className="mb-4 p-3 text-sm text-red-400 bg-red-100 rounded">
-            {error}
+            {error || externalError}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="username" className="block text-gray-700 font-semibold mb-1">
-              Username
+            <label htmlFor="email" className="block text-gray-700 font-semibold mb-1">
+              Email
             </label>
             <input
-              type="text"
-              id="username"
-              autoComplete="username"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
+              type="email"
+              id="email"
+              autoComplete="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border-2 border-[#2e2e2e] focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-transparent transition"
-              placeholder="Enter your username"
+              placeholder="Enter your email"
               required
             />
           </div>
@@ -84,10 +107,10 @@ const Login: React.FC<LoginProps> = ({ onLogin, loading = false, error }) => {
 
           <button
             type="submit"
-            disabled={loading}
-            className={`w-full py-3 rounded-xl text-[#2e2e2e] font-bold border-2 border-[#2e2e2e] transition ${loading ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-300 hover:bg-blue-400'}`}
+            disabled={loading || externalLoading}
+            className={`w-full py-3 rounded-xl text-[#2e2e2e] font-bold border-2 border-[#2e2e2e] transition ${(loading || externalLoading) ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-300 hover:bg-blue-400'}`}
           >
-            {loading ? 'Logging in...' : 'Log In'}
+            {(loading || externalLoading) ? 'Logging in...' : 'Log In'}
           </button>
         </form>
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import CardViewer from './components/cardviewer';
 import Foreground from './components/foreground';
 import Background from './components/background';
@@ -7,6 +8,7 @@ import Signup from './components/signup';
 import Landingpage from './components/landingpage';
 import Album from './components/album';
 import Userprofile from './components/userprofile';
+import Decks from './components/decks';
 
 const initialCards = [
   { id: 1, frontText: 'Front of card 1', backText: 'Back of card 1' },
@@ -82,26 +84,14 @@ function App() {
   };
 
   return (
-    <div className="w-full h-screen bg-[#E2E2E2]">
-      {/* <CardViewer
-        cards={cards}
-        deckTitle={deckTitle}
-        onSave={handleSaveCard}
-        onAddNew={handleAddNewCard}
-        onDelete={handleDeleteCard}
-        onDeckDelete={handleDeckDelete}
-        onDeckTitleChange={handleDeckTitleChange}
-      /> */}
-
-      {/* Toggle/Route the below components instead if needed */}
-      {/* <Foreground />
-      <Background /> */}
-      {/* <Login onLogin={handleLogin} loading={loading} error={error || undefined} /> */}
-      {/* <Signup onSignup={handleSignup} loading={loading} error={error || undefined} /> */}
-      <Landingpage />
-      {/* <Album deckTitle={deckTitle} cards={cards} onEdit={(id) => console.log('Edit', id)} /> */}
-      {/* <Userprofile/> */}
-    </div>
+    <Routes>
+      <Route path="/" element={<Landingpage />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/decks" element={<Decks />} />
+      <Route path="/decks/:id" element={<CardViewer cards={cards} onSaveCard={handleSaveCard} onAddNewCard={handleAddNewCard} onDeleteCard={handleDeleteCard} onDeckDelete={handleDeckDelete} deckTitle={deckTitle} onDeckTitleChange={handleDeckTitleChange} />} />
+      {/* Add other routes as needed */}
+    </Routes>
   );
 }
 
