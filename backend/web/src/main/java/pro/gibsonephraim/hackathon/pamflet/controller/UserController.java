@@ -1,6 +1,7 @@
 package pro.gibsonephraim.hackathon.pamflet.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 import pro.gibsonephraim.hackathon.pamflet.api.UserApi;
 import pro.gibsonephraim.hackathon.pamflet.model.ApiLoginPostRequest;
 import pro.gibsonephraim.hackathon.pamflet.model.UserModel;
@@ -8,12 +9,18 @@ import pro.gibsonephraim.hackathon.pamflet.service.UserService;
 
 import java.util.List;
 
+@RestController
 public class UserController implements UserApi {
-    private final UserService userService = new UserService();
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @Override
-    public ResponseEntity<Void> apiLoginPost(ApiLoginPostRequest apiLoginPostRequest) {
-        userService.login(apiLoginPostRequest);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> apiLoginPost(ApiLoginPostRequest apiLoginPostRequest) {
+        String token = userService.login(apiLoginPostRequest);
+        return ResponseEntity.ok(token);
     }
 
     @Override

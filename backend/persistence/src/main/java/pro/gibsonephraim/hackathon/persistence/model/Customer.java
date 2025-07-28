@@ -7,10 +7,14 @@ import java.util.List;
 
 @Data
 @Entity
-public class User {
+@Table(name = "\"customer\"")
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String username;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -18,10 +22,14 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    private String name;
+
     private String role;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> authorities;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Deck> decks;
 
 }
-

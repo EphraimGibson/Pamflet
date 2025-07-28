@@ -356,6 +356,10 @@ paths:
       responses:
         '200':
           description: Login successful
+          content:
+            application/json:
+              schema:
+                type: string
         '400':
           description: Invalid credentials
         '500':

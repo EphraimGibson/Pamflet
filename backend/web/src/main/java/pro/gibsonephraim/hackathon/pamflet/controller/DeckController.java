@@ -1,12 +1,14 @@
 package pro.gibsonephraim.hackathon.pamflet.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 import pro.gibsonephraim.hackathon.pamflet.api.DeckApi;
 import pro.gibsonephraim.hackathon.pamflet.model.DeckModel;
 import pro.gibsonephraim.hackathon.pamflet.service.DeckService;
 
 import java.util.List;
 
+@RestController
 public class DeckController implements DeckApi {
     private final DeckService deckService = new DeckService();
     @Override

@@ -6,12 +6,12 @@ import java.util.List;
 
 @Service
 public class CardService {
-    public List<CardModel> getCardsByDeck(String deckId) {
+    public List<CardModel> getCardsByDeck(Long deckId) {
         // TODO: Implement logic to fetch all cards in a deck
         return List.of();
     }
 
-    public CardModel getCardByDeckAndNumber(String deckId, Integer cardNumber) {
+    public CardModel getCardByDeckAndNumber(Long deckId, Integer cardNumber) {
         // TODO: Implement logic to fetch a specific card by deck and card number
         return null;
     }
@@ -21,7 +21,7 @@ public class CardService {
         return null;
     }
 
-    public CardModel addCardToDeck(String deckId, CardModel cardModel) {
+    public CardModel addCardToDeck(Long deckId, CardModel cardModel) {
         // TODO: Implement logic to add a card to a deck
         return null;
     }
