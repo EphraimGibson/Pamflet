@@ -17,19 +17,18 @@ public class CardController implements CardApi {
     }
 
     @Override
-    public ResponseEntity<CardModel> apiCardDeckIdCardNumberGet(Long deckId, Integer cardNumber) {
-        CardModel card = cardService.getCardByDeckAndNumber(deckId, cardNumber);
-        return ResponseEntity.ok(card);
-    }
-
-    @Override
-    public ResponseEntity<List<CardModel>> apiCardDeckIdGet(Long deckId) {
+    public ResponseEntity<List<CardModel>> apiCardDeckDeckIdGet(Long deckId) {
         List<CardModel> cards = cardService.getCardsByDeck(deckId);
         return ResponseEntity.ok(cards);
     }
 
     @Override
-    public ResponseEntity<CardModel> apiCardDeckIdPost(Long deckId, CardModel cardModel) {
+    public ResponseEntity<CardModel> apiCardDeckDeckIdNumberCardNumberGet(Long deckId, Integer cardNumber) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<CardModel> apiCardDeckDeckIdPost(Long deckId, CardModel cardModel) {
         CardModel created = cardService.addCardToDeck(deckId, cardModel);
         return ResponseEntity.ok(created);
     }

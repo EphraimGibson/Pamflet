@@ -21,5 +21,14 @@ public class JwtService {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
-}
 
+    public String extractUsername(String token) {
+        SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+}

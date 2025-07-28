@@ -4,7 +4,7 @@ info:
   version: 1.0.0
 
 paths:
-  /api/card/{deckId}:
+  /api/card/deck/{deckId}:
     get:
       tags:
         - Card
@@ -59,7 +59,7 @@ paths:
           description: Deck not found
         '500':
           description: Internal server error
-  /api/card/{deckId}/{cardNumber}:
+  /api/card/deck/{deckId}/number/{cardNumber}:
     get:
       tags:
         - Card

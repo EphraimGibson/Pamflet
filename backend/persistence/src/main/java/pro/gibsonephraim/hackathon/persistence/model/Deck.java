@@ -22,6 +22,5 @@ public class Deck {
     @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Card> cards;
 
-    // Getters and setters
 }
 

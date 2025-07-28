@@ -1,5 +1,7 @@
 package pro.gibsonephraim.hackathon.pamflet.converter;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import pro.gibsonephraim.hackathon.pamflet.model.DeckModel;
@@ -15,5 +17,11 @@ public class DeckConverter {
 
     public Deck convert(DeckModel model) {
         return modelMapper.map(model, Deck.class);
+    }
+
+    public List<DeckModel> convert(List<Deck> entities) {
+        return entities.stream()
+                .map(this::convert)
+                .collect(Collectors.toList());
     }
 }

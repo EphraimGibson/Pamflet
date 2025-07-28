@@ -10,7 +10,12 @@ import java.util.List;
 
 @RestController
 public class DeckController implements DeckApi {
-    private final DeckService deckService = new DeckService();
+    private final DeckService deckService;
+
+    public DeckController(DeckService deckService) {
+        this.deckService = deckService;
+    }
+
     @Override
     public ResponseEntity<List<DeckModel>> apiDeckGet() {
         return ResponseEntity.ok(deckService.getAllDecks());
@@ -18,7 +23,7 @@ public class DeckController implements DeckApi {
 
     @Override
     public ResponseEntity<DeckModel> apiDeckIdGet(Long id) {
-        return ResponseEntity.ok(deckService.getDeckById(id));
+        return ResponseEntity.ok(deckService.getDeckModelById(id));
     }
 
     @Override
